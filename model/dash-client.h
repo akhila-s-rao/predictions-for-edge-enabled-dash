@@ -167,7 +167,6 @@ private:
   Time m_segmentFetchTime;
   bool m_RequestPending = false; // So that we don't request the same segment repeatedly
 };
-
 } // namespace ns3
 
 #endif /* DASH_CLIENT_H */

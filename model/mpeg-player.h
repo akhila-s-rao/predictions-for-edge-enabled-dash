@@ -38,6 +38,7 @@ public:
   bool push (Ptr<Packet> frame);
   Ptr<Packet> pop ();
   int size ();
+  uint32_t bytes();
   bool empty ();
 
 private:
@@ -56,6 +57,7 @@ public:
   bool ReceiveFrame (Ptr<Packet> message);
 
   int GetQueueSize ();
+  uint32_t GetQueueBytes ();
 
   void Start ();
 

@@ -208,7 +208,7 @@ DashServer::HandleAccept (Ptr<Socket> s, const Address &from)
 void
 DashServer::DataSend (Ptr<Socket> socket, uint32_t)
 {
-  NS_LOG_FUNCTION (this);
+  //NS_LOG_FUNCTION (this);
 
   // for (std::map<Ptr<Socket>, std::queue<Packet>>::iterator iter = m_queues.begin ();
   //      iter != m_queues.end (); ++iter)
@@ -273,6 +273,11 @@ void
 DashServer::SendSegment (uint32_t video_id, uint32_t resolution, uint32_t segment_id,
                          Ptr<Socket> socket)
 {
+  // 50 = frames/second (fixed for this setup)
+  // resolution is bits/s (This is the segment quality requested by the client, 
+  // we can see it being set in the http header in dash-client.cc)
+  // frame size in bits = resolution(bits/s)  / (50 frames/s) = bits/frame
+  // frame size in bytes = frame size in bits /8 = bytes/frame
   int avg_packetsize = resolution / (50 * 8);
 
   HTTPHeader http_header_tmp;
@@ -286,6 +291,8 @@ DashServer::SendSegment (uint32_t video_id, uint32_t resolution, uint32_t segmen
       DoubleValue (std::max (2 * avg_packetsize - (int) (mpeg_header_tmp.GetSerializedSize () +
                                                          http_header_tmp.GetSerializedSize ()),
                              1)));
+  //frame_size_gen->SetAttribute ("Min", DoubleValue (avg_packetsize));
+  //frame_size_gen->SetAttribute ("Max", DoubleValue (avg_packetsize));
 
   for (uint32_t f_id = 0; f_id < MPEG_FRAMES_PER_SEGMENT; f_id++)
     {
@@ -310,6 +317,9 @@ DashServer::SendSegment (uint32_t video_id, uint32_t resolution, uint32_t segmen
       NS_LOG_INFO ("SENDING PACKET "
                    << f_id << " " << frame->GetSize () << " res=" << http_header.GetResolution ()
                    << " size=" << mpeg_header.GetSize () << " avg=" << avg_packetsize);
+      /*std::cout << "dash-server" << "mpeg_header.SetPlaybackTime" 
+      << mpeg_header.GetPlaybackTime().GetSeconds()
+      << std::endl;*/
 
       m_queues[socket].push_back (*frame);
     }

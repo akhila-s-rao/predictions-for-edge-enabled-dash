@@ -73,6 +73,14 @@ FrameBuffer::size ()
   return m_queue.size ();
 }
 
+uint32_t
+FrameBuffer::bytes ()
+{
+  NS_LOG_FUNCTION (this);
+  return m_size_in_bytes;
+}
+
+
 bool
 FrameBuffer::empty ()
 {
@@ -104,6 +112,12 @@ MpegPlayer::GetQueueSize ()
   return m_frameBuffer.size ();
 }
 
+uint32_t
+MpegPlayer::GetQueueBytes ()
+{
+  return m_frameBuffer.bytes ();
+}
+
 Time
 MpegPlayer::GetRealPlayTime (Time playTime)
 {
@@ -112,6 +126,12 @@ MpegPlayer::GetRealPlayTime (Time playTime)
                           << " playtime: " << playTime.GetSeconds ()
                           << " now: " << Simulator::Now ().GetSeconds () << " actual: "
                           << (m_start_time + m_interruption_time + playTime).GetSeconds ());
+  /*std::cout << " Start: " << m_start_time.GetSeconds ()
+                          << " Inter: " << m_interruption_time.GetSeconds ()
+                          << " playtime: " << playTime.GetSeconds ()
+                          << " now: " << Simulator::Now ().GetSeconds () << " actual: "
+                          << (m_start_time + m_interruption_time + playTime).GetSeconds () << std::endl;
+                          */
 
   return m_start_time + m_interruption_time +
          (m_state == MPEG_PLAYER_PAUSED ? (Simulator::Now () - m_lastpaused) : Seconds (0)) +
@@ -166,6 +186,7 @@ MpegPlayer::PlayFrame (void)
   else if (m_state == MPEG_INITIAL_BUFFERING)
     {
       m_start_time = Simulator::Now ();
+      //std::cout << " Video started playing at " << Simulator::Now ().GetSeconds () << std::endl;
       m_state = MPEG_PLAYER_PLAYING;
     }
   if (m_frameBuffer.empty ())
@@ -216,12 +237,12 @@ MpegPlayer::PlayFrame (void)
                << " interTime: " << m_interruption_time.GetSeconds ()
                << " queueLength: " << m_frameBuffer.size ());
 
-  /*   std::cout << " frId: " << mpeg_header.GetFrameId()
-     << " playtime: " << mpeg_header.GetPlaybackTime()
+   /*  std::cout << " frId: " << mpeg_header.GetFrameId()
+     << " playtime: " << mpeg_header.GetPlaybackTime().GetSeconds ()
      << " target: " << (m_start_time + m_interruption_time + mpeg_header.GetPlaybackTime()).GetSeconds()
      << " now: " << Simulator::Now().GetSeconds()
-     << std::endl;
-     */
+     << std::endl;*/
+     
   Simulator::Schedule (MilliSeconds (20), &MpegPlayer::PlayFrame, this);
 
   // There may be space now to read a new packet from the socket

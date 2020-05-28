@@ -123,7 +123,7 @@ void DashClient::StartApplication (void) // Called at time specified by Start
       NS_LOG_INFO ("m_socket is null");
 
       m_started = Simulator::Now ();
-
+      //std::cout << "Node: " << m_id << " DASHclient started at " << Simulator::Now ().GetSeconds () << std::endl;
       m_socket = Socket::CreateSocket (GetNode (), m_tid);
 
       // Fatal error if socket type is not NS3_SOCK_STREAM or NS3_SOCK_SEQPACKET
@@ -312,7 +312,7 @@ DashClient::MessageReceived (Packet message)
       AddBitRate (Simulator::Now (), 8 * m_segment_bytes / m_segmentFetchTime.GetSeconds ());
 
       Time currDt = m_player.GetRealPlayTime (mpegHeader.GetPlaybackTime ());
-      // And tell the player to monitor the buffer level
+      // And tell the player to monitor the buffer level and add to window
       LogBufferLevel (currDt);
 
       uint32_t old = m_bitRate;
@@ -326,6 +326,37 @@ DashClient::MessageReceived (Packet message)
       uint32_t prevBitrate = m_bitRate;
 
       CalcNextSegment (prevBitrate, m_bitRate, bufferDelay);
+
+      std::cout << Simulator::Now ().GetMicroSeconds () //tstamp_us
+      //outfile << Simulator::Now ().GetMicroSeconds () //tstamp_us
+                << "\t" << (m_id+1) //Node, the + 1 is because this is indexed from 0 and IMSI is indexed from 1
+                << "\t" << m_videoId
+                << "\t" << m_segmentId
+                << "\t" << m_bitRate //newBitRate 
+                << "\t" << old //oldBitRate
+                << "\t" << (8 * m_segment_bytes / m_segmentFetchTime.GetSeconds ()) //thputOverLastSeg_bps
+                << "\t" << GetBitRateEstimate () //estBitRate, average segment bitrate over last window seconds.
+                << "\t" << m_player.GetQueueBytes () // frame queue size in bytes
+                << "\t" << m_player.GetQueueSize () //frameQueueSize in number of frames
+                << "\t" << m_player.m_interruption_time.GetSeconds () //interTime_s, the time for which it was paused due to empty queue 
+                << "\t" << mpegHeader.GetPlaybackTime ().GetSeconds () //playbackTime ?? 
+                << "\t" << currDt.GetSeconds () // realplayTime or bufferTime, this is GetRealPlaytime (mpeg_header.GetPlaybackTime())
+                // currDt does not seem to indicate the current size of the mpeg player buffer, 
+                // but is still refered to as buffering time 
+                << "\t" << (m_lastDt >= 0 ? (currDt - m_lastDt).GetSeconds () : 0)
+                << "\t" << bufferDelay.GetSeconds () //time to wait before next segment is requested.   
+                << std::endl;
+      /*
+      std::cout << Simulator::Now ().GetSeconds () 
+                << " Node: " << m_id
+                << " newBitRate: " << m_bitRate << " oldBitRate: " << old
+                << " thputOverLastSeg: " << (8 * m_segment_bytes / m_segmentFetchTime.GetSeconds ())
+                << " estBitRate: " << GetBitRateEstimate ()
+                << " interTime: " << m_player.m_interruption_time.GetSeconds ()
+                << " bufferTime: " << currDt.GetSeconds ()
+                << " deltaBufferTime: " << (m_lastDt >= 0 ? (currDt - m_lastDt).GetSeconds () : 0)
+                << " delayToNxtReq: " << bufferDelay.GetSeconds () << std::endl;
+                */
 
       if (prevBitrate != m_bitRate)
         {
@@ -342,13 +373,7 @@ DashClient::MessageReceived (Packet message)
           Simulator::Schedule (bufferDelay, &DashClient::RequestSegment, this);
         }
 
-      std::cout << Simulator::Now ().GetSeconds () << " Node: " << m_id
-                << " newBitRate: " << m_bitRate << " oldBitRate: " << old
-                << " estBitRate: " << GetBitRateEstimate ()
-                << " interTime: " << m_player.m_interruption_time.GetSeconds ()
-                << " T: " << currDt.GetSeconds ()
-                << " dT: " << (m_lastDt >= 0 ? (currDt - m_lastDt).GetSeconds () : 0)
-                << " del: " << bufferDelay.GetSeconds () << std::endl;
+
 
       NS_LOG_INFO ("==== Last frame received. Requesting segment " << m_segmentId);
 
