@@ -331,12 +331,9 @@ static ns3::GlobalValue g_homeEnbBandwidth ("homeEnbBandwidth", "bandwidth [num 
                                             ns3::MakeUintegerChecker<uint16_t> ());
 static ns3::GlobalValue g_simTime ("simTime", "Total duration of the simulation [s]",
                                    ns3::DoubleValue (0.25), ns3::MakeDoubleChecker<double> ());
-<<<<<<< HEAD
 static ns3::GlobalValue g_maxstarttimedelay ("maxStartTimeDelay", "Max time difference between the request of first segment between UEs [s]",
                                             ns3::UintegerValue (10),
                                             ns3::MakeUintegerChecker<uint16_t> ());
-=======
->>>>>>> af8aea5e0666d513ae4a2a4a57ecc8b3685110f9
 static ns3::GlobalValue
     g_generateRem ("generateRem",
                    "if true, will generate a REM and then abort the simulation;"
@@ -490,11 +487,8 @@ main (int argc, char *argv[])
   uint16_t homeEnbBandwidth = uintegerValue.Get ();
   GlobalValue::GetValueByName ("simTime", doubleValue);
   double simTime = doubleValue.Get ();
-<<<<<<< HEAD
   GlobalValue::GetValueByName ("maxStartTimeDelay", uintegerValue);
   uint16_t maxStartTimeDelay = uintegerValue.Get ();
-=======
->>>>>>> af8aea5e0666d513ae4a2a4a57ecc8b3685110f9
   GlobalValue::GetValueByName ("epc", booleanValue);
   bool epc = booleanValue.Get ();
   GlobalValue::GetValueByName ("epcDl", booleanValue);
@@ -951,11 +945,7 @@ main (int argc, char *argv[])
         Time startTime = Seconds (5);
         Ptr<UniformRandomVariable> jitterTimeSeconds = CreateObject<UniformRandomVariable> ();
         jitterTimeSeconds->SetAttribute ("Min", DoubleValue (0.0));
-<<<<<<< HEAD
         jitterTimeSeconds->SetAttribute ("Max", DoubleValue (maxStartTimeDelay));
-=======
-        jitterTimeSeconds->SetAttribute ("Max", DoubleValue (MAX_START_TIME_DELAY));
->>>>>>> af8aea5e0666d513ae4a2a4a57ecc8b3685110f9
         clientApps.StartWithJitter (startTime, jitterTimeSeconds);
         serverApps.Start (Seconds (0.0));
 

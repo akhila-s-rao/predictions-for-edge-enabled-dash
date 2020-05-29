@@ -1,10 +1,5 @@
 using namespace ns3;
 
-<<<<<<< HEAD
-=======
-uint16_t MAX_START_TIME_DELAY = 1; // seconds
-
->>>>>>> af8aea5e0666d513ae4a2a4a57ecc8b3685110f9
 AsciiTraceHelper traceHelper;
 Ptr<OutputStreamWrapper> mobStream = traceHelper.CreateFileStream ("mobility_trace.txt");
 Ptr<OutputStreamWrapper> parmStream = traceHelper.CreateFileStream ("parameter_settings.txt");
@@ -62,8 +57,4 @@ Lte_RlcBufferSize (Ptr<OutputStreamWrapper> stream,
     << "\t" << (uint16_t)lcid 
     << "\t" << txQueueSize 
     << "\t" << retxQueueSize << std::endl;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> af8aea5e0666d513ae4a2a4a57ecc8b3685110f9
