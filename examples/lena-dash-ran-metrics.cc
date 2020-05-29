@@ -388,7 +388,8 @@ static ns3::GlobalValue g_numBearersPerUe ("numBearersPerUe",
 static ns3::GlobalValue g_srsPeriodicity ("srsPeriodicity",
                                           "SRS Periodicity (has to be at least "
                                           "greater than the number of UEs per eNB)",
-                                          ns3::UintegerValue (80),
+                                          ns3::UintegerValue (320), 
+					  // available vals are 0, 2, 5, 10, 20, 40,  80, 160, 320
                                           ns3::MakeUintegerChecker<uint16_t> ());
 static ns3::GlobalValue
     g_outdoorUeMinSpeed ("outdoorUeMinSpeed",
