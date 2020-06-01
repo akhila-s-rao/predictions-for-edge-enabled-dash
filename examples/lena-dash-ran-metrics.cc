@@ -329,6 +329,11 @@ static ns3::GlobalValue g_macroEnbBandwidth ("macroEnbBandwidth",
 static ns3::GlobalValue g_homeEnbBandwidth ("homeEnbBandwidth", "bandwidth [num RBs] used by HeNBs",
                                             ns3::UintegerValue (25),
                                             ns3::MakeUintegerChecker<uint16_t> ());
+
+static ns3::GlobalValue g_randSeed ("randSeed", "Set seed for random number generator",
+                                            ns3::UintegerValue (13),
+                                            ns3::MakeUintegerChecker<uint16_t> ());
+
 static ns3::GlobalValue g_simTime ("simTime", "Total duration of the simulation [s]",
                                    ns3::DoubleValue (0.25), ns3::MakeDoubleChecker<double> ());
 static ns3::GlobalValue g_maxstarttimedelay ("maxStartTimeDelay", "Max time difference between the request of first segment between UEs [s]",
@@ -485,6 +490,8 @@ main (int argc, char *argv[])
   uint16_t macroEnbBandwidth = uintegerValue.Get ();
   GlobalValue::GetValueByName ("homeEnbBandwidth", uintegerValue);
   uint16_t homeEnbBandwidth = uintegerValue.Get ();
+  GlobalValue::GetValueByName ("randSeed", uintegerValue);
+  uint16_t randSeed = uintegerValue.Get ();
   GlobalValue::GetValueByName ("simTime", doubleValue);
   double simTime = doubleValue.Get ();
   GlobalValue::GetValueByName ("maxStartTimeDelay", uintegerValue);
@@ -526,7 +533,7 @@ main (int argc, char *argv[])
 
 
   Config::SetDefault ("ns3::LteEnbRrc::SrsPeriodicity", UintegerValue (srsPeriodicity));
-  SeedManager::SetSeed (17);
+  SeedManager::SetSeed (randSeed);
 
   Box macroUeBox;
   double ueZ = 1.5;

@@ -27,6 +27,7 @@ do
 
 cmd_args="src/dash/examples/lena-dash-ran-metrics \
 --simTime=6 \
+--randSeed=13 \
 --epc=true --useUdp=false --algorithms='ns3::AaashClient' \
 --bufferSpace=10000000 \
 --homeEnbDeploymentRatio=0.2 --macroUeDensity=0.000075 \
