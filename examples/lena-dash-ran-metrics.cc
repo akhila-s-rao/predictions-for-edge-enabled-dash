@@ -67,8 +67,7 @@ LogPosition (NodeContainer* ues, Ptr<OutputStreamWrapper> stream)
             << "\t" << vel.x << "\t" << vel.y << "\t" << vel.z 
             << std::endl;
           }
-  Simulator::Schedule (MilliSeconds(1000), &LogPosition, ues, stream);
-  //Simulator::Schedule (MilliSeconds(1000), &LogPosition);
+  Simulator::Schedule (MilliSeconds(500), &LogPosition, ues, stream);
 }
 
 
