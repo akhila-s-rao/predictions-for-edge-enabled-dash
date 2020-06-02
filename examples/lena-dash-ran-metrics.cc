@@ -46,6 +46,26 @@ using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE ("LenaDash");
 
+void // Trace at UE
+Lte_ReportUeMeasurements (Ptr<OutputStreamWrapper> stream,
+              std::string context,
+              uint16_t rnti,
+              uint16_t cellId,
+              double avg_rsrp,
+              double avg_rsrq,
+              bool servingCell)
+{
+  *stream->GetStream()  << Simulator::Now ().GetMicroSeconds ()
+        //<< " " << GetNodeIdFromContext(context) //ue_node_id 
+        //<< " " << GetNodeIdFromLteCellId(cellId) //nbr_enb_node_id
+        << "\t" << context
+        << "\t" << avg_rsrp //avg_rsrp_dBm 
+        << "\t" << avg_rsrq // avg_rsrq_dBm 
+        << "\t" << servingCell // isServingCell 
+        << std::endl;
+}
+
+
 void
 LogPosition (NodeContainer* ues, Ptr<OutputStreamWrapper> stream)
 //LogPosition ()
@@ -331,7 +351,9 @@ static ns3::GlobalValue g_homeEnbBandwidth ("homeEnbBandwidth", "bandwidth [num 
 static ns3::GlobalValue g_randSeed ("randSeed", "Set seed for random number generator",
                                             ns3::UintegerValue (13),
                                             ns3::MakeUintegerChecker<uint16_t> ());
-
+static ns3::GlobalValue g_numVideos ("numVideos", "Set total num. of videos requested in network. Each UE requests one out of numVideos videos. The requests are uniformly distributed.",
+                                            ns3::UintegerValue (1),
+                                            ns3::MakeUintegerChecker<uint16_t> ());
 static ns3::GlobalValue g_simTime ("simTime", "Total duration of the simulation [s]",
                                    ns3::DoubleValue (0.25), ns3::MakeDoubleChecker<double> ());
 static ns3::GlobalValue g_maxstarttimedelay ("maxStartTimeDelay", "Max time difference between the request of first segment between UEs [s]",
@@ -490,6 +512,8 @@ main (int argc, char *argv[])
   uint16_t homeEnbBandwidth = uintegerValue.Get ();
   GlobalValue::GetValueByName ("randSeed", uintegerValue);
   uint16_t randSeed = uintegerValue.Get ();
+  GlobalValue::GetValueByName ("numVideos", uintegerValue);
+  uint16_t numVideos = uintegerValue.Get ();
   GlobalValue::GetValueByName ("simTime", doubleValue);
   double simTime = doubleValue.Get ();
   GlobalValue::GetValueByName ("maxStartTimeDelay", uintegerValue);
@@ -879,7 +903,8 @@ main (int argc, char *argv[])
 
                   dashClientHelper.SetAttribute (
                     // new added    
-                  "VideoId", UintegerValue (1)); // VideoId should be positive
+                  //"VideoId", UintegerValue (1)); // VideoId should be positive
+		  "VideoId", UintegerValue ((u % numVideos) + 1));
                   //    "VideoId", UintegerValue (u + 1)); // VideoId should be positive
                   dashClientHelper.SetAttribute ("TargetDt", TimeValue (Seconds (targetDt)));
                   dashClientHelper.SetAttribute ("window", TimeValue (Seconds (window)));
@@ -1081,8 +1106,8 @@ main (int argc, char *argv[])
   //Config::Connect ("/NodeList/*/DeviceList/*/$ns3::LteNetDevice/$ns3::LteUeNetDevice/ComponentCarrierMapUe/*/LteUePhy",
   Config::Connect ("/NodeList/*/DeviceList/*/$ns3::LteUeNetDevice/ComponentCarrierMapUe/*/LteUePhy",
                          MakeBoundCallback (&Lte_ReportUeMeasurements, rsrpRsrqStream));
-  Config::Connect ("/NodeList/*/DeviceList/*/LteEnbMac/PfFfMacScheduler/RlcTxQueueSize",
-                         MakeBoundCallback (&Lte_RlcBufferSize, rlcBufferSizeStream));
+//  Config::Connect ("/NodeList/*/DeviceList/*/LteEnbMac/PfFfMacScheduler/RlcTxQueueSize",
+//                         MakeBoundCallback (&Lte_RlcBufferSize, rlcBufferSizeStream));
   // Connect these traces onlt 21 ms after start of simulation. 
   //Simulator::Schedule (MilliSeconds(500), &ConnectDataRadioBearerTraceSourceUe, dlRlcRxStream, dlPdcpRxStream);
   //Simulator::Schedule (MilliSeconds(500), &ConnectDataRadioBearerTraceSourceEnb, dlRlcTxStream, dlPdcpTxStream);
