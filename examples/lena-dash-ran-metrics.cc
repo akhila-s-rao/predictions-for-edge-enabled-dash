@@ -58,12 +58,11 @@ LogPosition (NodeContainer* ues, Ptr<OutputStreamWrapper> stream)
           Ptr<LteUeNetDevice> uedev = ue_node->GetDevice (0)->GetObject<LteUeNetDevice> ();
           uint8_t rnti = uedev->GetRrc ()->GetRnti ();
           uint8_t imsi = uedev->GetImsi ();
-          //Ptr<LteEnbNetDevice> target_enb = uedev->GetTargetEnb ();
+          uint16_t cellId = uedev->GetRrc()->GetCellId();
           *stream->GetStream() << Simulator::Now ().GetMicroSeconds ()
           //std::cout << Simulator::Now ().GetMicroSeconds () 
             << "\t" << (uint16_t)rnti << "\t" << (uint16_t)imsi 
-            // This is causing a runtime error
-            //<< " enb_id " << target_enb->GetCellId ();
+            << "\t" << cellId
             << "\t" << pos.x << "\t" << pos.y << "\t" << pos.z 
             << "\t" << vel.x << "\t" << vel.y << "\t" << vel.z 
             << std::endl;
@@ -1089,7 +1088,7 @@ main (int argc, char *argv[])
   //Simulator::Schedule (MilliSeconds(500), &ConnectDataRadioBearerTraceSourceUe, dlRlcRxStream, dlPdcpRxStream);
   //Simulator::Schedule (MilliSeconds(500), &ConnectDataRadioBearerTraceSourceEnb, dlRlcTxStream, dlPdcpTxStream);
    
-  *mobStream->GetStream() << "tstamp_us\t" << "RNTI\t" << "IMSI\t" 
+  *mobStream->GetStream() << "tstamp_us\t" << "RNTI\t" << "IMSI\t" << "cellID\t"
           << "pos_x\t" << "pos_y\t" << "pos_z\t" 
           << "vel_x\t" << "vel_y\t" << "vel_z" 
           <<std::endl;
