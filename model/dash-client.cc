@@ -309,6 +309,8 @@ DashClient::MessageReceived (Packet message)
                    << " segmentRate: " << 8 * m_segment_bytes / m_segmentFetchTime.GetSeconds ());
 
       // Feed the bitrate info to the player
+      // This is not segment bit rate. it is achieved throughput over the segment.  
+      // It can be confused with just averaging the segment resoulution over a window, but it is not that. It is the actual rate from time to receive segment.
       AddBitRate (Simulator::Now (), 8 * m_segment_bytes / m_segmentFetchTime.GetSeconds ());
 
       Time currDt = m_player.GetRealPlayTime (mpegHeader.GetPlaybackTime ());

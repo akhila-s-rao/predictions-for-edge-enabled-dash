@@ -1060,7 +1060,7 @@ main (int argc, char *argv[])
           *parmStream->GetStream() << Simulator::Now ().GetMicroSeconds ()
             << " cellid " << enbdev->GetCellId() 
             << " pos_x " << pos.x << " pos_y " << pos.y
-            << "pos_z " << pos.z << std::endl;
+            << " pos_z " << pos.z << std::endl;
           }  
           // Log location of macroEnbs   
   *parmStream->GetStream() << "Locations of homeEnbs" << std::endl;
