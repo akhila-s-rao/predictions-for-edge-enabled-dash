@@ -16,6 +16,9 @@ sleep 2
 # Takes you from the src/dash/examples folder to the main ns3 folder where waf is. 
 cd ../../../
 
+# savbe this script so we know the parameter settings made
+cp src/dash/examples/vary_segDur.sh ${log_loc}'/.'
+
 for (( i=0; i<$len; i++ ))
 do
    sed -i '36s/.*/#define MPEG_FRAMES_PER_SEGMENT '${framesperseg[i]}'/' src/dash/model/mpeg-header.h

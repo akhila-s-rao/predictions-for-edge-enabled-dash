@@ -21,6 +21,9 @@ cd ../../../
 framesperseg=100
 sed -i '36s/.*/#define MPEG_FRAMES_PER_SEGMENT '${framesperseg}'/' src/dash/model/mpeg-header.h
 
+# save this script so we know the parameter settings made
+cp src/dash/examples/vary_macroUeDensity.sh ${log_loc}'/.'
+
 for (( i=0; i<$len; i++ ))
 do
    echo ${macroue_density[i]}
