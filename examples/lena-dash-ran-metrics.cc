@@ -578,6 +578,9 @@ main (int argc, char *argv[])
                         (nMacroEnbSitesY - 1) * interSiteDistance * sqrt (0.75) +
                             areaMarginFactor * interSiteDistance,
                         ueZ, ueZ);
+      *parmStream->GetStream() << "MacroUeBoxArea dimensions (xmin, xmax, ymin, ymax, zmin, zmax) = (" << -areaMarginFactor * interSiteDistance << ", " << (nMacroEnbSitesX + areaMarginFactor) * interSiteDistance
+	     << ", " << -areaMarginFactor * interSiteDistance << ", " << (nMacroEnbSitesY - 1) * interSiteDistance * sqrt (0.75) +
+                            areaMarginFactor * interSiteDistance << ", " << ueZ << ", " << ueZ << ")" << std::endl; 
     }
   else
     {
@@ -597,6 +600,8 @@ main (int argc, char *argv[])
       (macroUeBox.xMax - macroUeBox.xMin) * (macroUeBox.yMax - macroUeBox.yMin);
   uint32_t nMacroUes = round (macroUeAreaSize * macroUeDensity);
   NS_LOG_LOGIC ("nMacroUes = " << nMacroUes << " (density=" << macroUeDensity << ")");
+  *parmStream->GetStream() << "nHomeEnbs = " << nHomeEnbs << "\nnHomeUes = " << nHomeUes << "\nmacroUeAreaSize = " << macroUeAreaSize << "\nnMacroUes = " << nMacroUes << "\ndensity = " << macroUeDensity << std::endl;
+
 
   NodeContainer homeEnbs;
   homeEnbs.Create (nHomeEnbs);
@@ -1129,6 +1134,8 @@ main (int argc, char *argv[])
           << "interTime_s\t" << "playBackTime_s\t" << "BufferTime_s\t" 
           << "deltaBufferTime_s\t" << "delayToNxtReq_s\t"
           << std::endl;
+
+  std::cerr << "tstamp_us\t" << "Node\t" << "videoId\t" << "segmentId\t" << "bitRate\t" << "frameId\t" << "playbackTime\t" << "type\t" << "size\t" <<  "interTime\t" << "frameQueueBytes\t" << "frameQueueSize\t" << std::endl;
 
   Simulator::Schedule (MilliSeconds(0), &LogPosition, &ues, mobStream);
   //Simulator::Schedule (MilliSeconds(1000), &LogPosition);

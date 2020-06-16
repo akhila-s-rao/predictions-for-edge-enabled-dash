@@ -89,6 +89,7 @@ public:
   }
 
   void CheckBuffer ();
+  int GetId ();
 
 protected:
   virtual void DoDispose (void);

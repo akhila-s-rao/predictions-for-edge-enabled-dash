@@ -226,6 +226,19 @@ MpegPlayer::PlayFrame (void)
   //     m_bufferDelay = Seconds (0);
   //     // m_dashClient = NULL;
   //   }
+  std::cerr << Simulator::Now ().GetMicroSeconds ()
+	  << "\t" << m_dashClient->GetId()
+          << "\t" << http_header.GetVideoId ()
+	  << "\t" << http_header.GetSegmentId ()
+	  << "\t" << http_header.GetResolution ()
+	  << "\t" << mpeg_header.GetFrameId ()
+	  << "\t" << mpeg_header.GetPlaybackTime ().GetSeconds ()
+	  << "\t" << (char) mpeg_header.GetType ()
+	  << "\t" << mpeg_header.GetSize ()
+	  << "\t" << m_interruption_time.GetSeconds ()
+          << "\t" << GetQueueBytes ()
+          << "\t" << GetQueueSize ()
+          << std::endl;
 
   NS_LOG_INFO (Simulator::Now ().GetSeconds ()
                << " PLAYING FRAME: "

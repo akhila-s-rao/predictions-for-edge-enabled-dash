@@ -216,6 +216,13 @@ DashClient::CheckBuffer ()
   m_parser.ReadSocket(m_socket);
 }
 
+int
+DashClient::GetId ()
+{
+  NS_LOG_FUNCTION (this);
+  return m_id;
+}
+
 void
 DashClient::HandleRead (Ptr<Socket> socket)
 {
@@ -405,6 +412,7 @@ DashClient::GetStats ()
             << " minRate: " << m_player.m_minRate
             << " AvgDt: " << m_sumDt.GetSeconds () / m_player.m_framesPlayed
             << " changes: " << m_rateChanges << std::endl;
+	    
 }
 
 void
