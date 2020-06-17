@@ -459,8 +459,8 @@ main (int argc, char *argv[])
   //LogComponentEnable ("WaypointMobilityModel", LOG_LEVEL_ALL);
   //LogComponentEnable ("PositionAllocator", LOG_LEVEL_ALL);
 
-  //LogComponentEnable ("DashServer", LOG_LEVEL_ALL);
-  //LogComponentEnable ("DashClient", LOG_LEVEL_INFO);
+  LogComponentEnable ("DashServer", LOG_LEVEL_ALL);
+  LogComponentEnable ("DashClient", LOG_LEVEL_ALL);
   //LogComponentEnable ("MpegPlayer", LOG_LEVEL_INFO);
 
   CommandLine cmd;

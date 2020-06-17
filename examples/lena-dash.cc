@@ -402,9 +402,10 @@ main (int argc, char *argv[])
   LogComponentEnable ("ConstantVelocityHelper", LOG_LEVEL_INFO);
   LogComponentEnable ("WaypointMobilityModel", LOG_LEVEL_ALL);
   LogComponentEnable ("PositionAllocator", LOG_LEVEL_ALL);
-
-  // LogComponentEnable ("DashServer", LOG_LEVEL_ALL);
-  // LogComponentEnable ("DashClient", LOG_LEVEL_ALL);
+  std::cout << "I am here" << std::endl;
+  NS_LOG_LOGIC("I am here");
+  LogComponentEnable ("DashServer", LOG_LEVEL_ALL);
+  LogComponentEnable ("DashClient", LOG_LEVEL_ALL);
 
   CommandLine cmd;
   cmd.Parse (argc, argv);
