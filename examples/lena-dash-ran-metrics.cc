@@ -450,7 +450,7 @@ main (int argc, char *argv[])
   //LogComponentEnable ("BulkSendApplication", LOG_LEVEL_ALL);
   LogComponentEnable ("LenaDash", LOG_LEVEL_ALL);
 
-  //LogComponentEnable ("MobilityHelper", LOG_LEVEL_ALL);
+  LogComponentEnable ("MobilityHelper", LOG_LEVEL_ALL);
   //LogComponentEnable ("Ns2MobilityHelper", LOG_LEVEL_ALL);
   //LogComponentEnable ("GeographicPositions", LOG_LEVEL_ALL);
   //LogComponentEnable ("RandomDirection2dMobilityModel", LOG_LEVEL_ALL);

@@ -51,7 +51,7 @@ mkdir "${log_loc}/run$(($i + $1))"
 #taskset -c $(($i + $2)) ./waf "$run_type" "$cmd_args" --cwd="${log_loc}/run$(($i + $1))" \
 #> "${log_loc}/run$(($i + $1))/dash_client_log.txt" 2> "${log_loc}/run$(($i + $1))/mpeg_player_log.txt" &
 
-./waf "$run_type" "$cmd_args" --cwd="${log_loc}/run$(($i + $1))"
+./waf "$run_type" "$cmd_args" --cwd="${log_loc}/run$(($i + $1))" 2> "${log_loc}/run$(($i + $1))/mpeg_player_log.txt"
 
 cp src/dash/examples/one_run.sh "${log_loc}/run$(($i + $1))/."
 sleep $sleep_time

@@ -403,7 +403,7 @@ main (int argc, char *argv[])
   LogComponentEnable ("WaypointMobilityModel", LOG_LEVEL_ALL);
   LogComponentEnable ("PositionAllocator", LOG_LEVEL_ALL);
   std::cout << "I am here" << std::endl;
-  NS_LOG_LOGIC("I am here");
+  NS_LOG_LOGIC("I am here too");
   LogComponentEnable ("DashServer", LOG_LEVEL_ALL);
   LogComponentEnable ("DashClient", LOG_LEVEL_ALL);
 

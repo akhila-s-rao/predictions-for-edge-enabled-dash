@@ -227,7 +227,7 @@ MpegPlayer::PlayFrame (void)
   //     // m_dashClient = NULL;
   //   }
   std::cerr << Simulator::Now ().GetMicroSeconds ()
-	  << "\t" << m_dashClient->GetId()
+	  << "\t" << m_dashClient->GetId() + 1
           << "\t" << http_header.GetVideoId ()
 	  << "\t" << http_header.GetSegmentId ()
 	  << "\t" << http_header.GetResolution ()
