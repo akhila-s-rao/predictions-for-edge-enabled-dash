@@ -3,7 +3,7 @@ if [ $# -ne 2 ]; then
        exit 0
 fi
 
-log_loc='/home/akhilarao/data_from_ns3_dash_simulation/test_small_num_ues'
+log_loc='/home/akhilarao/data_from_ns3_dash_simulation/test_high_rate_not_used'
 mkdir "$log_loc"
 cd ../../../
 pwd
@@ -36,12 +36,12 @@ do
    fi
 
    cmd_args="src/dash/examples/lena-dash-ran-metrics \
---simTime=100 \
+--simTime=1000 \
 --randSeed=$(($i + 10)) \
 --numVideos=10 \
 --epc=true --useUdp=false --algorithms='ns3::FdashClient' \
 --bufferSpace=10000000 \
---homeEnbDeploymentRatio=0.2 \
+--homeEnbDeploymentRatio=0.0 \
 --macroUeDensity=$macroUeDensity \
 --macroEnbBandwidth=100 \
 --outdoorUeMinSpeed=1.4 --outdoorUeMaxSpeed=5.0 \
@@ -51,7 +51,7 @@ mkdir "${log_loc}/run$(($i + $1))"
 #taskset -c $(($i + $2)) ./waf "$run_type" "$cmd_args" --cwd="${log_loc}/run$(($i + $1))" \
 #> "${log_loc}/run$(($i + $1))/dash_client_log.txt" 2> "${log_loc}/run$(($i + $1))/mpeg_player_log.txt" &
 
-./waf "$run_type" "$cmd_args" --cwd="${log_loc}/run$(($i + $1))" 2> "${log_loc}/run$(($i + $1))/mpeg_player_log.txt"
+./waf "$run_type" "$cmd_args" --cwd="${log_loc}/run$(($i + $1))" 2> "${log_loc}/run$(($i + $1))/mpeg_player_log.txt" 1> "${log_loc}/run$(($i + $1))/dash_client_log.txt"
 
 cp src/dash/examples/one_run.sh "${log_loc}/run$(($i + $1))/."
 sleep $sleep_time

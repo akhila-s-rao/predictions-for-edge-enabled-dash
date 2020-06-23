@@ -263,7 +263,7 @@ DashServer::DataSend (Ptr<Socket> socket, uint32_t)
         }
       else
         {
-	  std::cout << Simulator::Now ().GetSeconds () << " Just sent " << frame->GetSize () << std::endl;
+	 // std::cout << Simulator::Now ().GetSeconds () << " Just sent " << frame->GetSize () << std::endl;
           NS_LOG_INFO ("Just sent " << frame->GetSerializedSize () << " " << frame->GetSize ());
           //socket->Send(Create<Packet>(0));
         }
@@ -280,7 +280,7 @@ DashServer::SendSegment (uint32_t video_id, uint32_t resolution, uint32_t segmen
   // frame size in bits = resolution(bits/s)  / (50 frames/s) = bits/frame
   // frame size in bytes = frame size in bits /8 = bytes/frame
   int avg_packetsize = resolution / (50 * 8);
-  std::cout << "avg_packt_size " << avg_packetsize << std::endl; 
+  //std::cout << "avg_packt_size " << avg_packetsize << std::endl; 
 
   HTTPHeader http_header_tmp;
   MPEGHeader mpeg_header_tmp;

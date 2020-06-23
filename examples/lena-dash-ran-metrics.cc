@@ -782,7 +782,8 @@ main (int argc, char *argv[])
       PointToPointHelper p2ph;
       p2ph.SetDeviceAttribute ("DataRate", DataRateValue (DataRate ("100Gb/s")));
       p2ph.SetDeviceAttribute ("Mtu", UintegerValue (1500));
-      p2ph.SetChannelAttribute ("Delay", TimeValue (Seconds (0.010)));
+      //p2ph.SetChannelAttribute ("Delay", TimeValue (Seconds (0.010)));
+      p2ph.SetChannelAttribute ("Delay", TimeValue (Seconds (0.0)));
       Ptr<Node> pgw = epcHelper->GetPgwNode ();
       NetDeviceContainer internetDevices = p2ph.Install (pgw, remoteHost);
       Ipv4AddressHelper ipv4h;
@@ -1057,27 +1058,25 @@ main (int argc, char *argv[])
    
   // Log location of homeEnbs 
   *parmStream->GetStream() << "Locations of macroEnbs" << std::endl;
+  *parmStream->GetStream() << "cellid\tpos_x\tpos_y\tpos_z" << std::endl;
   for (uint32_t u = 0; u < macroEnbs.GetN (); ++u){
           Ptr<Node> node = macroEnbs.Get (u);
           Ptr<MobilityModel> mob_model = node->GetObject<MobilityModel>();
           Vector pos = mob_model->GetPosition ();
           Ptr<LteEnbNetDevice> enbdev = node->GetDevice (0)->GetObject<LteEnbNetDevice> ();
-          *parmStream->GetStream() << Simulator::Now ().GetMicroSeconds ()
-            << " cellid " << enbdev->GetCellId() 
-            << " pos_x " << pos.x << " pos_y " << pos.y
-            << " pos_z " << pos.z << std::endl;
+          *parmStream->GetStream() << enbdev->GetCellId() << "\t"
+            << pos.x << "\t" << pos.y << "\t" << pos.z  << std::endl;
           }  
           // Log location of macroEnbs   
   *parmStream->GetStream() << "Locations of homeEnbs" << std::endl;
+  *parmStream->GetStream() << "cellid\tpos_x\tpos_y\tpos_z" << std::endl;
   for (uint32_t u = 0; u < homeEnbs.GetN (); ++u){
           Ptr<Node> node = homeEnbs.Get (u);
           Ptr<MobilityModel> mob_model = node->GetObject<MobilityModel>();
           Vector pos = mob_model->GetPosition ();
           Ptr<LteEnbNetDevice> enbdev = node->GetDevice (0)->GetObject<LteEnbNetDevice> ();
-          *parmStream->GetStream() << Simulator::Now ().GetMicroSeconds ()
-            << " cellid " << enbdev->GetCellId() 
-            << " pos_x " << pos.x << " pos_y " << pos.y
-            << "pos_z " << pos.z << std::endl;
+          *parmStream->GetStream() << enbdev->GetCellId() << "\t"
+            << pos.x << "\t" << pos.y << "\t" << pos.z << std::endl;
           }
 
   // macroUes is of type NodeContainer
@@ -1132,10 +1131,10 @@ main (int argc, char *argv[])
           << "tstamp_us\t" << "Node\t" << "videoId\t" << "segmentId\t" << "newBitRate_bps\t" << "oldBitRate_bps\t"
           << "thputOverLastSeg_bps\t" << "avgThputOverWindow_bps(estBitRate)\t" << "frameQueueBytes\t" << "frameQueueSize\t"
           << "interTime_s\t" << "playBackTime_s\t" << "BufferTime_s\t" 
-          << "deltaBufferTime_s\t" << "delayToNxtReq_s\t"
+          << "deltaBufferTime_s\t" << "delayToNxtReq_s"
           << std::endl;
 
-  std::cerr << "tstamp_us\t" << "Node\t" << "videoId\t" << "segmentId\t" << "bitRate\t" << "frameId\t" << "playbackTime\t" << "type\t" << "size\t" <<  "interTime\t" << "frameQueueBytes\t" << "frameQueueSize\t" << std::endl;
+  std::cerr << "tstamp_us\t" << "Node\t" << "videoId\t" << "segmentId\t" << "bitRate\t" << "frameId\t" << "playbackTime\t" << "type\t" << "size\t" <<  "interTime\t" << "frameQueueBytes\t" << "frameQueueSize" << std::endl;
 
   Simulator::Schedule (MilliSeconds(0), &LogPosition, &ues, mobStream);
   //Simulator::Schedule (MilliSeconds(1000), &LogPosition);
