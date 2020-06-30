@@ -603,6 +603,7 @@ main (int argc, char *argv[])
   *parmStream->GetStream() << "nHomeEnbs = " << nHomeEnbs << "\nnHomeUes = " << nHomeUes << "\nmacroUeAreaSize = " << macroUeAreaSize << "\nnMacroUes = " << nMacroUes << "\ndensity = " << macroUeDensity << std::endl;
 
 
+//  uint16_t numComponentCarriers = 1;
   NodeContainer homeEnbs;
   homeEnbs.Create (nHomeEnbs);
   NodeContainer macroEnbs;
@@ -615,7 +616,34 @@ main (int argc, char *argv[])
   MobilityHelper mobility;
   mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
 
+//  Ptr<LteHelper> lteHelper = CreateObject<LteHelper> ();
+/*  Config::SetDefault ("ns3::LteEnbNetDevice::DlEarfcn", UintegerValue (100));
+  Config::SetDefault ("ns3::LteEnbNetDevice::UlEarfcn", UintegerValue (100 + 18000));
+  Config::SetDefault ("ns3::LteEnbNetDevice::DlBandwidth", UintegerValue (25));
+  Config::SetDefault ("ns3::LteEnbNetDevice::UlBandwidth", UintegerValue (25));
+  Config::SetDefault ("ns3::LteUeNetDevice::DlEarfcn", UintegerValue (100));
+
+  Config::SetDefault ("ns3::LteHelper::UseCa", BooleanValue (true));
+  Config::SetDefault ("ns3::LteHelper::NumberOfComponentCarriers", UintegerValue (2));
+  Config::SetDefault ("ns3::LteHelper::EnbComponentCarrierManager", StringValue ("ns3::RrComponentCarrierManager"));
+  Config::SetDefault ("ns3::LteSpectrumPhy::CtrlErrorModelEnabled", BooleanValue (false));
+  Config::SetDefault ("ns3::LteSpectrumPhy::DataErrorModelEnabled", BooleanValue (false));
+  Config::SetDefault ("ns3::LteHelper::UseIdealRrc", BooleanValue (true));
+*/
+//  Config::SetDefault ("ns3::LteHelper::UseCa", BooleanValue (false));
+//  Config::SetDefault ("ns3::LteHelper::NumberOfComponentCarriers", UintegerValue (1));
+//  Config::SetDefault ("ns3::LteHelper::EnbComponentCarrierManager", StringValue ("ns3::RrComponentCarrierManager"));
   Ptr<LteHelper> lteHelper = CreateObject<LteHelper> ();
+/*  lteHelper->SetAttribute ("UseCa",
+                           BooleanValue (true));
+  lteHelper->SetAttribute ("NumberOfComponentCarriers",
+                           UintegerValue (4));
+  lteHelper->SetAttribute ("EnbComponentCarrierManager",
+                           StringValue ("ns3::RrComponentCarrierManager"));
+*/
+
+
+  
   lteHelper->SetAttribute ("PathlossModel",
                            StringValue ("ns3::HybridBuildingsPropagationLossModel"));
   lteHelper->SetPathlossModelAttribute ("ShadowSigmaExtWalls", DoubleValue (0));
@@ -664,6 +692,11 @@ main (int argc, char *argv[])
   lteHelper->SetEnbDeviceAttribute ("UlBandwidth", UintegerValue (macroEnbBandwidth));
   NetDeviceContainer macroEnbDevs =
       lteHexGridEnbTopologyHelper->SetPositionAndInstallEnbDevice (macroEnbs);
+
+//  Config::SetDefault ("ns3::LteHelper::UseCa", BooleanValue (true));
+//  Config::SetDefault ("ns3::LteHelper::NumberOfComponentCarriers", UintegerValue (5));
+//  Config::SetDefault ("ns3::LteHelper::EnbComponentCarrierManager", StringValue ("ns3::RrComponentCarrierManager"));
+
 
   if (epc)
     {
@@ -1048,7 +1081,8 @@ main (int argc, char *argv[])
   if (epc)
     {
       //lteHelper->EnablePdcpTraces ();
-      lteHelper->EnableTraces ();
+      //lteHelper->EnableTraces ();
+      //std::cout << "Not enabling traces" << std::endl;
     }
   Ptr<RadioBearerStatsCalculator> rlcStats = lteHelper->GetRlcStats ();  
   rlcStats->SetAttribute ("EpochDuration", TimeValue (Seconds (0.01)));
