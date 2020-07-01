@@ -236,6 +236,7 @@ DashServer::DataSend (Ptr<Socket> socket, uint32_t)
 
       if (max_tx_size <= 0)
         {
+          std::cout << "Socket Send buffer is full: " << max_tx_size << std::endl;
           NS_LOG_INFO ("Socket Send buffer is full");
           return;
         }
@@ -247,6 +248,7 @@ DashServer::DataSend (Ptr<Socket> socket, uint32_t)
 
       if (max_tx_size < init_size)
         {
+          std::cout << "Insufficient space in send buffer, fragmenting. First fragment is " << max_tx_size << " second is " << init_size - max_tx_size << std::endl;
           NS_LOG_INFO ("Insufficient space in send buffer, fragmenting");
           Ptr<Packet> frag0 = frame->CreateFragment (0, max_tx_size);
           Ptr<Packet> frag1 = frame->CreateFragment (max_tx_size, init_size - max_tx_size);
@@ -258,6 +260,7 @@ DashServer::DataSend (Ptr<Socket> socket, uint32_t)
       uint32_t bytes;
       if ((bytes = socket->Send (frame)) < frame->GetSize ())
         {
+          std::cout << "Couldn't send packet, though space should be available" << std::endl;
           NS_FATAL_ERROR ("Couldn't send packet, though space should be available");
           exit (1);
         }

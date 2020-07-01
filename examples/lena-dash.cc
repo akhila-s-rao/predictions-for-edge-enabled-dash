@@ -707,7 +707,7 @@ main (int argc, char *argv[])
       PointToPointHelper p2ph;
       p2ph.SetDeviceAttribute ("DataRate", DataRateValue (DataRate ("100Gb/s")));
       p2ph.SetDeviceAttribute ("Mtu", UintegerValue (1500));
-      p2ph.SetChannelAttribute ("Delay", TimeValue (Seconds (0.010)));
+      p2ph.SetChannelAttribute ("Delay", TimeValue (Seconds (0.0)));
       Ptr<Node> pgw = epcHelper->GetPgwNode ();
       NetDeviceContainer internetDevices = p2ph.Install (pgw, remoteHost);
       Ipv4AddressHelper ipv4h;

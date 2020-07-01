@@ -631,7 +631,7 @@ main (int argc, char *argv[])
   Config::SetDefault ("ns3::LteHelper::UseIdealRrc", BooleanValue (true));
 */
 //  Config::SetDefault ("ns3::LteHelper::UseCa", BooleanValue (false));
-//  Config::SetDefault ("ns3::LteHelper::NumberOfComponentCarriers", UintegerValue (1));
+//  Config::SetDefault ("ns3::LteHelper::NumberOfComponentCarriers", UintegerValue (2));
 //  Config::SetDefault ("ns3::LteHelper::EnbComponentCarrierManager", StringValue ("ns3::RrComponentCarrierManager"));
   Ptr<LteHelper> lteHelper = CreateObject<LteHelper> ();
 /*  lteHelper->SetAttribute ("UseCa",
@@ -670,6 +670,8 @@ main (int argc, char *argv[])
       NS_LOG_LOGIC ("enabling EPC");
       epcHelper = CreateObject<PointToPointEpcHelper> ();
       lteHelper->SetEpcHelper (epcHelper);
+      epcHelper->SetAttribute("S1uLinkDelay", TimeValue (Seconds (0)));
+     // epcHelper.SetChannelAttribute ("Delay", TimeValue (Seconds (0.010)));
     }
 
   // Macro eNBs in 3-sector hex grid
@@ -816,7 +818,7 @@ main (int argc, char *argv[])
       p2ph.SetDeviceAttribute ("DataRate", DataRateValue (DataRate ("100Gb/s")));
       p2ph.SetDeviceAttribute ("Mtu", UintegerValue (1500));
       //p2ph.SetChannelAttribute ("Delay", TimeValue (Seconds (0.010)));
-      p2ph.SetChannelAttribute ("Delay", TimeValue (Seconds (0.0)));
+      p2ph.SetChannelAttribute ("Delay", TimeValue (MicroSeconds (0)));
       Ptr<Node> pgw = epcHelper->GetPgwNode ();
       NetDeviceContainer internetDevices = p2ph.Install (pgw, remoteHost);
       Ipv4AddressHelper ipv4h;
@@ -915,6 +917,8 @@ main (int argc, char *argv[])
                     {
                       NS_LOG_LOGIC ("installing UDP DL app for UE " << u);
                       UdpClientHelper dlClientHelper (ueIpIfaces.GetAddress (u), dlPort);
+                      //new
+                      dlClientHelper.SetAttribute ("PacketSize", UintegerValue (10000));
                       clientApps.Add (dlClientHelper.Install (remoteHost));
                       PacketSinkHelper dlPacketSinkHelper (
                           "ns3::UdpSocketFactory",
@@ -1081,19 +1085,19 @@ main (int argc, char *argv[])
   if (epc)
     {
       //lteHelper->EnablePdcpTraces ();
-      //lteHelper->EnableTraces ();
-      //std::cout << "Not enabling traces" << std::endl;
+      lteHelper->EnableTraces ();
     }
   Ptr<RadioBearerStatsCalculator> rlcStats = lteHelper->GetRlcStats ();  
-  rlcStats->SetAttribute ("EpochDuration", TimeValue (Seconds (0.01)));
+  rlcStats->SetAttribute ("EpochDuration", TimeValue (Seconds (1)));
   Ptr<RadioBearerStatsCalculator> pdcpStats = lteHelper->GetPdcpStats ();
   //rlcStats->SetAttribute ("StartTime", TimeValue (Seconds (0)));
-  pdcpStats->SetAttribute ("EpochDuration", TimeValue (Seconds (0.01)));
+  pdcpStats->SetAttribute ("EpochDuration", TimeValue (Seconds (1)));
    
   // Log location of homeEnbs 
   *parmStream->GetStream() << "Locations of macroEnbs" << std::endl;
   *parmStream->GetStream() << "cellid\tpos_x\tpos_y\tpos_z" << std::endl;
-  for (uint32_t u = 0; u < macroEnbs.GetN (); ++u){
+
+/*  for (uint32_t u = 0; u < macroEnbs.GetN (); ++u){
           Ptr<Node> node = macroEnbs.Get (u);
           Ptr<MobilityModel> mob_model = node->GetObject<MobilityModel>();
           Vector pos = mob_model->GetPosition ();
@@ -1101,6 +1105,7 @@ main (int argc, char *argv[])
           *parmStream->GetStream() << enbdev->GetCellId() << "\t"
             << pos.x << "\t" << pos.y << "\t" << pos.z  << std::endl;
           }  
+*/
           // Log location of macroEnbs   
   *parmStream->GetStream() << "Locations of homeEnbs" << std::endl;
   *parmStream->GetStream() << "cellid\tpos_x\tpos_y\tpos_z" << std::endl;
@@ -1142,8 +1147,11 @@ main (int argc, char *argv[])
   // Lte
   //Config::Connect ("/NodeList/*/DeviceList/*/LteUePhy/ReportUeMeasurements",
   //Config::Connect ("/NodeList/*/DeviceList/*/$ns3::LteNetDevice/$ns3::LteUeNetDevice/ComponentCarrierMapUe/*/LteUePhy",
-  Config::Connect ("/NodeList/*/DeviceList/*/$ns3::LteUeNetDevice/ComponentCarrierMapUe/*/LteUePhy",
-                         MakeBoundCallback (&Lte_ReportUeMeasurements, rsrpRsrqStream));
+
+//  Config::Connect ("/NodeList/*/DeviceList/*/$ns3::LteUeNetDevice/ComponentCarrierMapUe/*/LteUePhy",
+//                         MakeBoundCallback (&Lte_ReportUeMeasurements, rsrpRsrqStream));
+
+
 //  Config::Connect ("/NodeList/*/DeviceList/*/LteEnbMac/PfFfMacScheduler/RlcTxQueueSize",
 //                         MakeBoundCallback (&Lte_RlcBufferSize, rlcBufferSizeStream));
   // Connect these traces onlt 21 ms after start of simulation. 
@@ -1154,11 +1162,11 @@ main (int argc, char *argv[])
           << "pos_x\t" << "pos_y\t" << "pos_z\t" 
           << "vel_x\t" << "vel_y\t" << "vel_z" 
           <<std::endl;
-
+/*
   *rsrpRsrqStream->GetStream() << "tstamp_us\t" << "context\t" << "RNTI\t" 
           << "cellId\t" << "rsrp_dbm\t" << "rsrq_dbm\t" 
           << "isServingCell" 
-          <<std::endl;
+          <<std::endl;*/
                   
   //*dashClientStream->GetStream() 
   std::cout 
@@ -1170,8 +1178,7 @@ main (int argc, char *argv[])
 
   std::cerr << "tstamp_us\t" << "Node\t" << "videoId\t" << "segmentId\t" << "bitRate\t" << "frameId\t" << "playbackTime\t" << "type\t" << "size\t" <<  "interTime\t" << "frameQueueBytes\t" << "frameQueueSize" << std::endl;
 
-  Simulator::Schedule (MilliSeconds(0), &LogPosition, &ues, mobStream);
-  //Simulator::Schedule (MilliSeconds(1000), &LogPosition);
+//  Simulator::Schedule (MilliSeconds(0), &LogPosition, &ues, mobStream);
   Simulator::Run ();
 
   uint32_t users = clientApps.GetN ();
