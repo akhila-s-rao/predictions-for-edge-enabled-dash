@@ -3,8 +3,8 @@ if [ $# -ne 2 ]; then
        exit 0
 fi
 
-#log_loc='/home/akhilarao/data_from_ns3_dash_simulation/scenario4_varyNumUes'
-log_loc='/home/akhilarao/data_from_ns3_dash_simulation/test_runs'
+log_loc='/home/akhilarao/data_from_ns3_dash_simulation/scenario4_varyNumUes_smallerRsrpFile'
+#log_loc='/home/akhilarao/data_from_ns3_dash_simulation/test_runs'
 mkdir "$log_loc"
 cd ../../../
 pwd
@@ -21,8 +21,8 @@ sed -i '36s/.*/#define MPEG_FRAMES_PER_SEGMENT '${framesperseg}'/' src/dash/mode
 # 0.000005417 = 5 UEs
 # 0.000001417 = 1 UEs
 
-#len=15
-len=1
+len=18
+#len=1
 for (( i=0; i<$len; i++ ))
 do
    if [ $i -eq 0 ]; then
@@ -33,13 +33,13 @@ do
       sleep_time=3
    fi
 
-   if [ $i -lt 5 ]; then
-      #macroUeDensity=0.00002875 #  Ues
-      macroUeDensity=0.000001417 # 1 or 2 UEs
-   elif [ $i -ge 5 ] && [ $i -lt 10 ]; then
+   if [ $i -lt 6 ]; then
+      macroUeDensity=0.00002875 #  Ues
+      #macroUeDensity=0.000001417 # 1 or 2 UEs
+   elif [ $i -ge 6 ] && [ $i -lt 12 ]; then
       macroUeDensity=0.00003875 #  Ues
    else 
-      macroUeDensity=0.00004875 # 53 Ues
+      macroUeDensity=0.00004875 # Ues
    fi
 
 #   cmd_args="src/dash/examples/lena-dash \
@@ -54,8 +54,8 @@ do
 #"
 
    cmd_args="src/dash/examples/lena-dash-ran-metrics \
---simTime=100 \
---randSeed=$(($i + 11)) \
+--simTime=1000 \
+--randSeed=$(($i + 13)) \
 --numVideos=10 \
 --epc=true \
 --useUdp=false \
