@@ -3,7 +3,8 @@ if [ $# -ne 2 ]; then
        exit 0
 fi
 
-log_loc='/home/akhilarao/data_from_ns3_dash_simulation/test_low_BW'
+#log_loc='/home/akhilarao/data_from_ns3_dash_simulation/scenario4_varyNumUes'
+log_loc='/home/akhilarao/data_from_ns3_dash_simulation/test_runs'
 mkdir "$log_loc"
 cd ../../../
 pwd
@@ -33,11 +34,12 @@ do
    fi
 
    if [ $i -lt 5 ]; then
-      macroEnbDlEarfcn=100
+      #macroUeDensity=0.00002875 #  Ues
+      macroUeDensity=0.000001417 # 1 or 2 UEs
    elif [ $i -ge 5 ] && [ $i -lt 10 ]; then
-      macroEnbDlEarfcn=200
+      macroUeDensity=0.00003875 #  Ues
    else 
-      macroEnbDlEarfcn=2750
+      macroUeDensity=0.00004875 # 53 Ues
    fi
 
 #   cmd_args="src/dash/examples/lena-dash \
@@ -60,13 +62,14 @@ do
 --algorithms='ns3::FdashClient' \
 --bufferSpace=10000000 \
 --homeEnbDeploymentRatio=0.0 \
---macroUeDensity=0.000001417 \
+--macroUeDensity=$macroUeDensity \
 --macroEnbBandwidth=100 \
 --outdoorUeMinSpeed=1.4 --outdoorUeMaxSpeed=5.0 \
---maxStartTimeDelay=5 \
---macroEnbDlEarfcn=$macroEnbDlEarfcn \
+--maxStartTimeDelay=10 \
+--macroEnbDlEarfcn=100 \
 --epcDl=true \
---epcUl=false \
+--epcUl=true \
+--nMacroEnbSites=4 \
 "
 
 mkdir "${log_loc}/run$(($i + $1))"

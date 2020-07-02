@@ -445,7 +445,12 @@ main (int argc, char *argv[])
   // arguments, so that the user is allowed to override these settings
   Config::SetDefault ("ns3::UdpClient::Interval", TimeValue (MilliSeconds (1)));
   Config::SetDefault ("ns3::UdpClient::MaxPackets", UintegerValue (1000000));
-  Config::SetDefault ("ns3::LteRlcUm::MaxTxBufferSize", UintegerValue (10 * 1024));
+//  Config::SetDefault ("ns3::LteRlcUm::MaxTxBufferSize", UintegerValue (10 * 1024)); //deafult
+  Config::SetDefault ("ns3::LteRlcUm::MaxTxBufferSize", UintegerValue (45 * 1024 * 1024));
+  // Increase the size of the Tcp buffer to handle the large segment sizes
+  Config::SetDefault ("ns3::TcpSocket::SndBufSize", UintegerValue (45000000));
+  Config::SetDefault ("ns3::LteUePhy::RsrpSinrSamplePeriod", UintegerValue (10));//millisecond
+
 
   //LogComponentEnable ("BulkSendApplication", LOG_LEVEL_ALL);
   LogComponentEnable ("LenaDash", LOG_LEVEL_ALL);
@@ -671,7 +676,8 @@ main (int argc, char *argv[])
       epcHelper = CreateObject<PointToPointEpcHelper> ();
       lteHelper->SetEpcHelper (epcHelper);
       epcHelper->SetAttribute("S1uLinkDelay", TimeValue (Seconds (0)));
-     // epcHelper.SetChannelAttribute ("Delay", TimeValue (Seconds (0.010)));
+      //epcHelper->SetAttribute("S1uLinkMtu", UintegerValue (6000));
+      //epcHelper.SetChannelAttribute ("Delay", TimeValue (Seconds (0.010)));
     }
 
   // Macro eNBs in 3-sector hex grid
@@ -816,9 +822,12 @@ main (int argc, char *argv[])
       // Create the Internet
       PointToPointHelper p2ph;
       p2ph.SetDeviceAttribute ("DataRate", DataRateValue (DataRate ("100Gb/s")));
-      p2ph.SetDeviceAttribute ("Mtu", UintegerValue (1500));
+      p2ph.SetDeviceAttribute ("Mtu", UintegerValue (1500)); // default
+//      p2ph.SetDeviceAttribute ("Mtu", UintegerValue (6000));
       //p2ph.SetChannelAttribute ("Delay", TimeValue (Seconds (0.010)));
       p2ph.SetChannelAttribute ("Delay", TimeValue (MicroSeconds (0)));
+      // new
+      //p2ph.SetQueue("ns3::DropTailQueue<Packet>", "MaxSize",ns3::QueueSizeValue(ns3::QueueSize("1000Mp")));
       Ptr<Node> pgw = epcHelper->GetPgwNode ();
       NetDeviceContainer internetDevices = p2ph.Install (pgw, remoteHost);
       Ipv4AddressHelper ipv4h;
@@ -1088,16 +1097,16 @@ main (int argc, char *argv[])
       lteHelper->EnableTraces ();
     }
   Ptr<RadioBearerStatsCalculator> rlcStats = lteHelper->GetRlcStats ();  
-  rlcStats->SetAttribute ("EpochDuration", TimeValue (Seconds (1)));
+  rlcStats->SetAttribute ("EpochDuration", TimeValue (Seconds (0.01)));
   Ptr<RadioBearerStatsCalculator> pdcpStats = lteHelper->GetPdcpStats ();
   //rlcStats->SetAttribute ("StartTime", TimeValue (Seconds (0)));
-  pdcpStats->SetAttribute ("EpochDuration", TimeValue (Seconds (1)));
+  pdcpStats->SetAttribute ("EpochDuration", TimeValue (Seconds (0.01)));
    
   // Log location of homeEnbs 
   *parmStream->GetStream() << "Locations of macroEnbs" << std::endl;
   *parmStream->GetStream() << "cellid\tpos_x\tpos_y\tpos_z" << std::endl;
 
-/*  for (uint32_t u = 0; u < macroEnbs.GetN (); ++u){
+  for (uint32_t u = 0; u < macroEnbs.GetN (); ++u){
           Ptr<Node> node = macroEnbs.Get (u);
           Ptr<MobilityModel> mob_model = node->GetObject<MobilityModel>();
           Vector pos = mob_model->GetPosition ();
@@ -1105,7 +1114,7 @@ main (int argc, char *argv[])
           *parmStream->GetStream() << enbdev->GetCellId() << "\t"
             << pos.x << "\t" << pos.y << "\t" << pos.z  << std::endl;
           }  
-*/
+
           // Log location of macroEnbs   
   *parmStream->GetStream() << "Locations of homeEnbs" << std::endl;
   *parmStream->GetStream() << "cellid\tpos_x\tpos_y\tpos_z" << std::endl;
@@ -1178,7 +1187,7 @@ main (int argc, char *argv[])
 
   std::cerr << "tstamp_us\t" << "Node\t" << "videoId\t" << "segmentId\t" << "bitRate\t" << "frameId\t" << "playbackTime\t" << "type\t" << "size\t" <<  "interTime\t" << "frameQueueBytes\t" << "frameQueueSize" << std::endl;
 
-//  Simulator::Schedule (MilliSeconds(0), &LogPosition, &ues, mobStream);
+  Simulator::Schedule (MilliSeconds(0), &LogPosition, &ues, mobStream);
   Simulator::Run ();
 
   uint32_t users = clientApps.GetN ();

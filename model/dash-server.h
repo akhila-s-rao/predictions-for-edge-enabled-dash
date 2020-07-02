@@ -83,6 +83,11 @@ private:
   void HandlePeerClose (Ptr<Socket>); // Called when the connection is closed by the peer.
   void HandlePeerError (Ptr<Socket>); // Called when there is a peer error
 
+  void DataSendNxtFrame (void); // To add delay between frame sends
+
+
+
+
   // In the case of TCP, each socket accept returns a new socket, so the
   // listening socket is stored seperately from the accepted sockets
   Ptr<Socket> m_socket; // Listening socket
@@ -95,6 +100,8 @@ private:
 
   // A structure that contains the generated MPEG frames, for each client.
   std::map<Ptr<Socket>, std::deque<Packet>> m_queues;
+  // to track if the timer between frames is still running
+  bool m_betweenFrameTimeWait = false;
 };
 
 } // namespace ns3

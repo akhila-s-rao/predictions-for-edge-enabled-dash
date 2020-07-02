@@ -103,6 +103,11 @@ void DashServer::StartApplication () // Called at time specified by Start
   if (!m_socket)
     {
       m_socket = Socket::CreateSocket (GetNode (), m_tid);
+      // Increase the size of the socket buffer
+      //error: �~@~Xclass ns3::Socket�~@~Y has no member named �~@~XSetSndBufSize�~@~Y
+//      m_socket->SetSndBufSize(50000000); 
+//      m_socket->SetAttribute ("ns3::TxBuffer", UintegerValue(50000000));
+//      std::cout << "m_tid: " << m_tid << "tid of TcpSocketFactory " << m_socket->GetTypeId() << std::endl;
       m_socket->Bind (m_local);
       m_socket->Listen ();
       // m_socket->ShutdownSend ();
@@ -230,13 +235,14 @@ DashServer::DataSend (Ptr<Socket> socket, uint32_t)
   //       }
   //   }
 
-  while (!m_queues[socket].empty ())
+  while (!m_queues[socket].empty () && !m_betweenFrameTimeWait)
     {
       uint32_t max_tx_size = socket->GetTxAvailable ();
+      //std::cout << "max_tx_size from socket: " << max_tx_size << std::endl;
 
       if (max_tx_size <= 0)
         {
-          std::cout << "Socket Send buffer is full: " << max_tx_size << std::endl;
+          //std::cout << "Socket Send buffer is full, doing return : " << max_tx_size << std::endl;
           NS_LOG_INFO ("Socket Send buffer is full");
           return;
         }
@@ -246,13 +252,16 @@ DashServer::DataSend (Ptr<Socket> socket, uint32_t)
 
       uint32_t init_size = frame->GetSize ();
 
+      //std::cout << "Frame size : " << init_size << std::endl;
       if (max_tx_size < init_size)
         {
-          std::cout << "Insufficient space in send buffer, fragmenting. First fragment is " << max_tx_size << " second is " << init_size - max_tx_size << std::endl;
+          //std::cout << "Insufficient space in send buffer, fragmenting. First fragment is " << max_tx_size << " second is " << init_size - max_tx_size << std::endl;
           NS_LOG_INFO ("Insufficient space in send buffer, fragmenting");
           Ptr<Packet> frag0 = frame->CreateFragment (0, max_tx_size);
           Ptr<Packet> frag1 = frame->CreateFragment (max_tx_size, init_size - max_tx_size);
 
+          // send the first part of the fragment and put the rest of the frame 
+	  // back into the queue to be picked up the next time
           m_queues[socket].push_front (*frag1);
           frame = frag0;
         }
@@ -260,17 +269,25 @@ DashServer::DataSend (Ptr<Socket> socket, uint32_t)
       uint32_t bytes;
       if ((bytes = socket->Send (frame)) < frame->GetSize ())
         {
-          std::cout << "Couldn't send packet, though space should be available" << std::endl;
+          //std::cout << "Couldn't send packet, though space should be available" << std::endl;
           NS_FATAL_ERROR ("Couldn't send packet, though space should be available");
           exit (1);
         }
       else
         {
-	 // std::cout << Simulator::Now ().GetSeconds () << " Just sent " << frame->GetSize () << std::endl;
+	  //std::cout << Simulator::Now ().GetSeconds () << " Just sent " << frame->GetSize () << std::endl;
           NS_LOG_INFO ("Just sent " << frame->GetSerializedSize () << " " << frame->GetSize ());
+          m_betweenFrameTimeWait = true;
+          Simulator::Schedule (MicroSeconds(0), &DashServer::DataSendNxtFrame, this);
           //socket->Send(Create<Packet>(0));
         }
     }
+}
+
+void
+DashServer::DataSendNxtFrame ()
+{
+ m_betweenFrameTimeWait = false;
 }
 
 void
