@@ -45,7 +45,7 @@ do
 #   cmd_args="src/dash/examples/lena-dash \
 #--simTime=500 \
 #--epc=true --useUdp=false --algorithms='ns3::FdashClient' \
-#--bufferSpace=10000000 \
+#--bufferSpace=31250000 \
 #--homeEnbDeploymentRatio=0.0 \
 #--macroUeDensity=0.000001417 \
 #--macroEnbBandwidth=100 \
@@ -60,7 +60,7 @@ do
 --epc=true \
 --useUdp=false \
 --algorithms='ns3::FdashClient' \
---bufferSpace=10000000 \
+--bufferSpace=31250000 \
 --homeEnbDeploymentRatio=0.0 \
 --macroUeDensity=$macroUeDensity \
 --macroEnbBandwidth=100 \
