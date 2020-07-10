@@ -3,7 +3,7 @@ using namespace ns3;
 AsciiTraceHelper traceHelper;
 Ptr<OutputStreamWrapper> mobStream = traceHelper.CreateFileStream ("mobility_trace.txt");
 Ptr<OutputStreamWrapper> parmStream = traceHelper.CreateFileStream ("parameter_settings.txt");
-Ptr<OutputStreamWrapper> rsrpRsrqStream = traceHelper.CreateFileStream ("rsrp_rsrq.txt");
+//Ptr<OutputStreamWrapper> rsrpRsrqStream = traceHelper.CreateFileStream ("rsrp_rsrq.txt");
 //Ptr<OutputStreamWrapper> rlcBufferSizeStream = traceHelper.CreateFileStream ("rlc_buffer.txt");
 //Ptr<OutputStreamWrapper> dashClientStream = traceHelper.CreateFileStream ("dash_client.txt");
 /*

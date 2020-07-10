@@ -80,7 +80,8 @@ DashClient::DashClient ()
       m_id (m_countObjs++),
       m_requestTime ("0s"),
       m_segment_bytes (0),
-      m_bitRate (1000000),
+    //  m_bitRate (400000),
+      m_bitRate (1000000),	
       m_window (Seconds (10)),
       m_segmentFetchTime (Seconds (0))
 {

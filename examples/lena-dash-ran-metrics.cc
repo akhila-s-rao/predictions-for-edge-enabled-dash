@@ -445,12 +445,15 @@ main (int argc, char *argv[])
   // arguments, so that the user is allowed to override these settings
   Config::SetDefault ("ns3::UdpClient::Interval", TimeValue (MilliSeconds (1)));
   Config::SetDefault ("ns3::UdpClient::MaxPackets", UintegerValue (1000000));
-//  Config::SetDefault ("ns3::LteRlcUm::MaxTxBufferSize", UintegerValue (10 * 1024)); //deafult
-  Config::SetDefault ("ns3::LteRlcUm::MaxTxBufferSize", UintegerValue (45 * 1024 * 1024));
-  // Increase the size of the Tcp buffer to handle the large segment sizes
-  Config::SetDefault ("ns3::TcpSocket::SndBufSize", UintegerValue (45000000));
-  Config::SetDefault ("ns3::LteUePhy::RsrpSinrSamplePeriod", UintegerValue (10));//millisecond
+  Config::SetDefault ("ns3::LteRlcUm::MaxTxBufferSize", UintegerValue (75 * 1024 * 1024));
 
+  Config::SetDefault ("ns3::LteHelper::UseCa", BooleanValue (true));
+  Config::SetDefault ("ns3::LteHelper::NumberOfComponentCarriers", UintegerValue (3));
+  Config::SetDefault ("ns3::LteHelper::EnbComponentCarrierManager", StringValue ("ns3::RrComponentCarrierManager"));
+
+  // Increase the size of the Tcp buffer to handle the large segment sizes
+  Config::SetDefault ("ns3::TcpSocket::SndBufSize", UintegerValue (75000000));
+  Config::SetDefault ("ns3::LteUePhy::RsrpSinrSamplePeriod", UintegerValue (10));//millisecond
 
   //LogComponentEnable ("BulkSendApplication", LOG_LEVEL_ALL);
   LogComponentEnable ("LenaDash", LOG_LEVEL_ALL);
@@ -629,20 +632,20 @@ main (int argc, char *argv[])
   Config::SetDefault ("ns3::LteUeNetDevice::DlEarfcn", UintegerValue (100));
 
   Config::SetDefault ("ns3::LteHelper::UseCa", BooleanValue (true));
-  Config::SetDefault ("ns3::LteHelper::NumberOfComponentCarriers", UintegerValue (2));
+  Config::SetDefault ("ns3::LteHelper::NumberOfComponentCarriers", UintegerValue (3));
   Config::SetDefault ("ns3::LteHelper::EnbComponentCarrierManager", StringValue ("ns3::RrComponentCarrierManager"));
   Config::SetDefault ("ns3::LteSpectrumPhy::CtrlErrorModelEnabled", BooleanValue (false));
   Config::SetDefault ("ns3::LteSpectrumPhy::DataErrorModelEnabled", BooleanValue (false));
   Config::SetDefault ("ns3::LteHelper::UseIdealRrc", BooleanValue (true));
 */
-//  Config::SetDefault ("ns3::LteHelper::UseCa", BooleanValue (false));
+//  Config::SetDefault ("ns3::LteHelper::UseCa", BooleanValue (true));
 //  Config::SetDefault ("ns3::LteHelper::NumberOfComponentCarriers", UintegerValue (2));
 //  Config::SetDefault ("ns3::LteHelper::EnbComponentCarrierManager", StringValue ("ns3::RrComponentCarrierManager"));
   Ptr<LteHelper> lteHelper = CreateObject<LteHelper> ();
 /*  lteHelper->SetAttribute ("UseCa",
                            BooleanValue (true));
   lteHelper->SetAttribute ("NumberOfComponentCarriers",
-                           UintegerValue (4));
+                           UintegerValue (2));
   lteHelper->SetAttribute ("EnbComponentCarrierManager",
                            StringValue ("ns3::RrComponentCarrierManager"));
 */
@@ -1093,8 +1096,21 @@ main (int argc, char *argv[])
   //lteHelper->EnableRlcTraces ();
   if (epc)
     {
-      //lteHelper->EnablePdcpTraces ();
-      lteHelper->EnableTraces ();
+      lteHelper->EnableMacTraces ();
+      lteHelper->EnableRlcTraces ();  
+      lteHelper->EnablePdcpTraces ();
+
+      lteHelper->EnableDlPhyTraces ();
+      // When the Interference trace is activated inside this function we get an error. This works for lena-dash, 
+      //  so it must be something we have added. Need to Investigate.  
+//      lteHelper->EnableUlPhyTraces ();
+      lteHelper->EnableDlTxPhyTraces ();
+      lteHelper->EnableUlTxPhyTraces ();
+      lteHelper->EnableDlRxPhyTraces ();
+      lteHelper->EnableUlRxPhyTraces ();
+
+//    lteHelper->EnablePhyTraces ();
+      //lteHelper->EnableTraces ();
     }
   Ptr<RadioBearerStatsCalculator> rlcStats = lteHelper->GetRlcStats ();  
   rlcStats->SetAttribute ("EpochDuration", TimeValue (Seconds (0.01)));

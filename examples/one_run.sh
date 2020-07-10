@@ -3,8 +3,8 @@ if [ $# -ne 2 ]; then
        exit 0
 fi
 
-log_loc='/home/akhilarao/data_from_ns3_dash_simulation/scenario4_varyNumUes_smallerRsrpFile'
-#log_loc='/home/akhilarao/data_from_ns3_dash_simulation/test_runs'
+log_loc='/home/akhilarao/data_from_ns3_dash_simulation/dataset7_35Mbps_max_brate_withCa_secondTry'
+#log_loc='/home/akhilarao/data_from_ns3_dash_simulation/test_3ca'
 mkdir "$log_loc"
 cd ../../../
 pwd
@@ -21,9 +21,12 @@ sed -i '36s/.*/#define MPEG_FRAMES_PER_SEGMENT '${framesperseg}'/' src/dash/mode
 # 0.000005417 = 5 UEs
 # 0.000001417 = 1 UEs
 
-len=18
+len=24
 #len=1
-for (( i=0; i<$len; i++ ))
+
+for i in 7 8 13 14 15 
+	#16 17 18 19
+#for (( i=0; i<$len; i++ ))
 do
    if [ $i -eq 0 ]; then
       run_type='--run'
@@ -34,12 +37,19 @@ do
    fi
 
    if [ $i -lt 6 ]; then
-      macroUeDensity=0.00002875 #  Ues
-      #macroUeDensity=0.000001417 # 1 or 2 UEs
+      #macroUeDensity=0.00002875 #  Ues
+      echo $i
+      macroUeDensity=0.000020000 # UEs
    elif [ $i -ge 6 ] && [ $i -lt 12 ]; then
-      macroUeDensity=0.00003875 #  Ues
-   else 
-      macroUeDensity=0.00004875 # Ues
+      echo $i
+      #macroUeDensity=0.00003875 #  Ues
+      macroUeDensity=0.000030000 # 23 UEs
+   elif [ $i -ge 12 ] && [ $i -lt 18 ]; then
+     echo $i 
+     # macroUeDensity=0.00004875 # Ues
+      macroUeDensity=0.000050000 # 23 UEs
+   else
+      macroUeDensity=0.000060000 # 23 UEs
    fi
 
 #   cmd_args="src/dash/examples/lena-dash \
@@ -53,14 +63,18 @@ do
 #--macroEnbDlEarfcn=$macroEnbDlEarfcn \
 #"
 
+
+#--bufferSpace=31250000 \
+#--bufferSpace=18750000 
+
    cmd_args="src/dash/examples/lena-dash-ran-metrics \
 --simTime=1000 \
---randSeed=$(($i + 13)) \
+--randSeed=$(($i + 43)) \
 --numVideos=10 \
 --epc=true \
 --useUdp=false \
 --algorithms='ns3::FdashClient' \
---bufferSpace=31250000 \
+--bufferSpace=218750000 \
 --homeEnbDeploymentRatio=0.0 \
 --macroUeDensity=$macroUeDensity \
 --macroEnbBandwidth=100 \
@@ -76,11 +90,14 @@ mkdir "${log_loc}/run$(($i + $1))"
 taskset -c $(($i + $2)) ./waf "$run_type" "$cmd_args" --cwd="${log_loc}/run$(($i + $1))" \
 > "${log_loc}/run$(($i + $1))/dash_client_log.txt" 2> "${log_loc}/run$(($i + $1))/mpeg_player_log.txt" &
 
+echo "Started run $(($i + $1))" 
+
 #./waf "$run_type" "$cmd_args" --cwd="${log_loc}/run$(($i + $1))"
 #--command-template="gdb"
 #2> "${log_loc}/run$(($i + $1))/mpeg_player_log.txt" \
 #1> "${log_loc}/run$(($i + $1))/dash_client_log.txt"
 
 cp src/dash/examples/one_run.sh "${log_loc}/run$(($i + $1))/."
+cp -r src/dash/examples/lena-dash-ran-metrics* "${log_loc}/run$(($i + $1))/."
 sleep $sleep_time
 done

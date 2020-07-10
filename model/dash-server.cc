@@ -235,7 +235,8 @@ DashServer::DataSend (Ptr<Socket> socket, uint32_t)
   //       }
   //   }
 
-  while (!m_queues[socket].empty () && !m_betweenFrameTimeWait)
+//  while (!m_queues[socket].empty () && !m_betweenFrameTimeWait)
+  while (!m_queues[socket].empty ())
     {
       uint32_t max_tx_size = socket->GetTxAvailable ();
       //std::cout << "max_tx_size from socket: " << max_tx_size << std::endl;
@@ -277,8 +278,8 @@ DashServer::DataSend (Ptr<Socket> socket, uint32_t)
         {
 	  //std::cout << Simulator::Now ().GetSeconds () << " Just sent " << frame->GetSize () << std::endl;
           NS_LOG_INFO ("Just sent " << frame->GetSerializedSize () << " " << frame->GetSize ());
-          m_betweenFrameTimeWait = true;
-          Simulator::Schedule (MicroSeconds(0), &DashServer::DataSendNxtFrame, this);
+          //m_betweenFrameTimeWait = true;
+          //Simulator::Schedule (MicroSeconds(0), &DashServer::DataSendNxtFrame, this);
           //socket->Send(Create<Packet>(0));
         }
     }

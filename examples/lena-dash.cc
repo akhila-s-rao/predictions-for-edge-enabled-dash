@@ -391,6 +391,11 @@ main (int argc, char *argv[])
   Config::SetDefault ("ns3::UdpClient::MaxPackets", UintegerValue (1000000));
   Config::SetDefault ("ns3::LteRlcUm::MaxTxBufferSize", UintegerValue (10 * 1024));
 
+  Config::SetDefault ("ns3::LteHelper::UseCa", BooleanValue (true));
+  Config::SetDefault ("ns3::LteHelper::NumberOfComponentCarriers", UintegerValue (3));
+  Config::SetDefault ("ns3::LteHelper::EnbComponentCarrierManager", StringValue ("ns3::RrComponentCarrierManager"));
+
+
   // LogComponentEnable ("BulkSendApplication", LOG_LEVEL_ALL);
   LogComponentEnable ("LenaDash", LOG_LEVEL_ALL);
 
@@ -957,11 +962,14 @@ main (int argc, char *argv[])
       Simulator::Stop (Seconds (simTime));
     }
 
-  lteHelper->EnableMacTraces ();
-  lteHelper->EnableRlcTraces ();
+//lteHelper->EnableMacTraces ();
+//lteHelper->EnableRlcTraces ();
   if (epc)
     {
+      lteHelper->EnableMacTraces ();
+      lteHelper->EnableRlcTraces ();
       lteHelper->EnablePdcpTraces ();
+      lteHelper->EnablePhyTraces ();
     }
 
   Simulator::Run ();
