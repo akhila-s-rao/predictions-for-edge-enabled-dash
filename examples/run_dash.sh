@@ -3,14 +3,14 @@ if [ $# -ne 2 ]; then
        exit 0
 fi
 
-log_loc='/home/akhilarao/data_from_ns3_dash_simulation/dataset8_35Mbps_withCa_2sSeg'
-#log_loc='/home/akhilarao/data_from_ns3_dash_simulation/test_3ca'
+#log_loc='/home/akhilarao/data_from_ns3_dash_simulation/dataset7_35Mbps_max_brate_withCa'
+log_loc='/home/akhilarao/data_from_ns3_dash_simulation/dataset8_35Mbps_withCa_4sSeg'
 mkdir "$log_loc"
 cd ../../../
 pwd
 
-# 2 second segments with 20 ms between frames within the segment 
-framesperseg=100 # 2 second segments
+# X second segments with 20 ms between frames within the segment 
+framesperseg=200 # 2 second segments
 sed -i '36s/.*/#define MPEG_FRAMES_PER_SEGMENT '${framesperseg}'/' src/dash/model/mpeg-header.h
 
 # use macroUeDensity=0.000260 for over 250 UEs
@@ -62,7 +62,7 @@ do
 
    cmd_args="src/dash/examples/lena-dash-ran-metrics \
 --simTime=1000 \
---randSeed=$(($i + 53)) \
+--randSeed=$(($i + 73)) \
 --numVideos=10 \
 --epc=true \
 --useUdp=false \
@@ -89,7 +89,7 @@ echo "Started run $(($i + $1))"
 #2> "${log_loc}/run$(($i + $1))/mpeg_player_log.txt" \
 #1> "${log_loc}/run$(($i + $1))/dash_client_log.txt"
 
-cp src/dash/examples/one_run.sh "${log_loc}/run$(($i + $1))/."
+cp src/dash/examples/run_dash.sh "${log_loc}/run$(($i + $1))/."
 cp -r src/dash/examples/lena-dash-ran-metrics* "${log_loc}/run$(($i + $1))/."
 sleep $sleep_time
 done
