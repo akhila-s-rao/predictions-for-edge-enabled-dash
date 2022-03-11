@@ -28,12 +28,17 @@ Installation instructions
        The ns3 script dash/examples/lena-dash-ran-metrics.cc contains the script to run 
        
      The run_dash.sh bash script provides a structured way to run the lena-dash-ran-metrics.cc script with the same set of initial parameters used for the generation of our dataset 
-       
-
-     
+            
 
 Dataset
 ========
 Here is a link to the dataset generated from the scenario in the above script.  
 
 https://drive.google.com/file/d/1mghIo65ZgFurpeea2JVME2oRzO2RoX1s/view?usp=sharing
+
+
+Reference
+=======
+Here is our paper describing the dataset generation process and the machine learnign approach to predict video segment bitrate with the objective of predictively prefetching to the mobile edge, segments of ongoing video streams
+
+CNSM 2020 https://ieeexplore.ieee.org/document/9269054
