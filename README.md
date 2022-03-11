@@ -24,10 +24,11 @@ Installation instructions
        ```
 
   4. Now the setup is complete.
-       ```
+       
        The ns3 script dash/examples/lena-dash-ran-metrics.cc contains the script to run 
+       
      The run_dash.sh bash script provides a structured way to run the lena-dash-ran-metrics.cc script with the same set of initial parameters used for the generation of our dataset 
-       ```
+       
 
      
 
