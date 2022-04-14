@@ -36,16 +36,19 @@ ns-3 dash module installation instructions
 To download existing raw dataset
 ========
 Here is a link to the dataset generated from the scenario in the above script.  
-
+```
 https://drive.google.com/drive/folders/1GjgB4Q8te7MrtDNGjZsne8U-nx5p7XXK?usp=sharing
-
+```
 To run the machine learning algorithms for prediction of bitrate 
 ========
-This code is in a different git ptoject that can be found here 
-...Add link to github project
-
-The pre-processed data to use for the machine learnign can be found in the data folder of this project 
-
+This code is in a different git ptoject that can be cloned from 
+```
+git clone https://github.com/akhila-s-rao/machine-learning-for-edge-enabled-dash.git
+```
+The pre-processed data to use for the machine learnign can be found in 
+```
+machine-learning-for-edge-enabled-dash/data
+```
 Reference
 =======
 Here is our paper describing the dataset generation process and the machine learnign approach to predict video segment bitrate with the objective of predictively prefetching to the mobile edge, segments of ongoing video streams
