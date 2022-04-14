@@ -6,17 +6,20 @@ Our contribution is the creation of video streaming scenario scripts where users
 
 To install the module follow these instructions (taken from https://github.com/djvergad/dash)
 
-Installation instructions
-----
+To Generate Dataset
+========
+
+ns-3 dash module installation instructions
+--------
 
   1. Install ns3 on you system, using the instructions like from here: https://www.nsnam.org/wiki/Installation#Downloading_ns-3_Using_Mercurial.
   2. Download the module into the `src` directory, with the following commands:
        ```
        cd ns-3-dev/
        cd src/
-       git clone https://github.com/akhila-s-rao/ns3_dash_over_ran.git
+       git clone https://github.com/akhila-s-rao/predictions-for-edge-enabled-dash.git
        ```
-     Rename this cloned directory `ns3_dash_over_ran` to `dash`   
+     Rename this cloned directory `predictions-for-edge-enabled-dash` to `dash`   
     
   3. Re-configure ns3 and enable examples. From the `ns-3-dev` directory, type:
        ```
@@ -30,12 +33,18 @@ Installation instructions
      The run_dash.sh bash script provides a structured way to run the lena-dash-ran-metrics.cc script with the same set of initial parameters used for the generation of our dataset 
             
 
-Dataset
+To download existing raw dataset
 ========
 Here is a link to the dataset generated from the scenario in the above script.  
 
 https://drive.google.com/drive/folders/1GjgB4Q8te7MrtDNGjZsne8U-nx5p7XXK?usp=sharing
 
+To run the machine learning algorithms for prediction of bitrate 
+========
+This code is in a different git ptoject that can be found here 
+...Add link to github project
+
+The pre-processed data to use for the machine learnign can be found in the data folder of this project 
 
 Reference
 =======
