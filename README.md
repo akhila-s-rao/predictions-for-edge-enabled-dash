@@ -46,7 +46,7 @@ This code is in a different git project that can be cloned from
 git clone https://github.com/akhila-s-rao/machine-learning-for-edge-enabled-dash.git
 ```
 The dataset linked above contains both the raw dataset and the pre-processed data that we used for our machine learning.
-If you would like to run the machine learning scripts place the folder "Data" obtained from the google drive link into the cloned machine-learning-for-edge-enabled-dash directory for the machine learning scripts to be able to access them. 
+If you would like to run the machine learning scripts place the folder "data" obtained from the google drive link into the cloned machine-learning-for-edge-enabled-dash directory for the machine learning scripts to be able to access them. 
 
 Reference
 =======
