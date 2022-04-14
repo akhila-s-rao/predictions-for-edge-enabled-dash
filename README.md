@@ -6,7 +6,7 @@ Our contribution is the creation of video streaming scenario scripts where users
 
 To install the module follow these instructions (taken from https://github.com/djvergad/dash)
 
-To Generate Dataset
+To Generate the dataset
 ========
 
 ns-3 dash module installation instructions
@@ -36,9 +36,9 @@ ns-3 dash module installation instructions
 To download existing raw dataset
 ========
 Here is a link to the dataset generated from the scenario in the above script.  
-```
+
 https://drive.google.com/drive/folders/1GjgB4Q8te7MrtDNGjZsne8U-nx5p7XXK?usp=sharing
-```
+
 To run the machine learning algorithms for prediction of bitrate 
 ========
 This code is in a different git ptoject that can be cloned from 
