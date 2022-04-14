@@ -33,22 +33,21 @@ ns-3 dash module installation instructions
      The run_dash.sh bash script provides a structured way to run the lena-dash-ran-metrics.cc script with the same set of initial parameters used for the generation of our dataset 
             
 
-To download existing raw dataset
+To download existing dataset 
 ========
-Here is a link to the dataset generated from the scenario in the above script.  
+Here is the link to the dataset generated from the scenario in the above script.  
 
-https://drive.google.com/drive/folders/1GjgB4Q8te7MrtDNGjZsne8U-nx5p7XXK?usp=sharing
+https://drive.google.com/drive/folders/1NmbUdS0EM9ZlR5sNQt_kzJvCQgtoeiUZ?usp=sharing
 
 To run the machine learning algorithms for prediction of bitrate 
 ========
-This code is in a different git ptoject that can be cloned from 
+This code is in a different git project that can be cloned from 
 ```
 git clone https://github.com/akhila-s-rao/machine-learning-for-edge-enabled-dash.git
 ```
-The pre-processed data to use for the machine learnign can be found in 
-```
-machine-learning-for-edge-enabled-dash/data
-```
+The dataset linked above contains both the raw dataset and the pre-processed data that we used for our machine learning.
+If you would like to run the machine learning scripts place the folder "Data" obtained from the google drive link into the cloned machine-learning-for-edge-enabled-dash directory for the machine learning scripts to be able to access them. 
+
 Reference
 =======
 Here is our paper describing the dataset generation process and the machine learnign approach to predict video segment bitrate with the objective of predictively prefetching to the mobile edge, segments of ongoing video streams
