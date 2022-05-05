@@ -50,10 +50,9 @@ If you would like to run the machine learning scripts place the folder "data" ob
 
 Appendix with our model results
 =======
-You can find an appendix with additional tables showing result from our evaluations that have not been included in our paper for brevity
+You can find here an appendix with additional tables showing result from our evaluations that have not been included in our paper for brevity
 
-https://github.com/akhila-s-rao/machine-learning-for-edge-enabled-dash.git
-
+https://github.com/akhila-s-rao/machine-learning-for-edge-enabled-dash/blob/master/documentation/Appendix_Predictive_prefetching_for_edge_assisted_video_streaming.pdf
 
 Reference
 =======
