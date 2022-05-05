@@ -48,6 +48,13 @@ git clone https://github.com/akhila-s-rao/machine-learning-for-edge-enabled-dash
 The dataset linked above contains both the raw dataset and the pre-processed data that we used for our machine learning.
 If you would like to run the machine learning scripts place the folder "data" obtained from the google drive link into the cloned machine-learning-for-edge-enabled-dash directory for the machine learning scripts to be able to access them. 
 
+Appendix with our model results
+=======
+You can find an appendix with additional tables showing result from our evaluations that have not been included in our paper for brevity
+
+https://github.com/akhila-s-rao/machine-learning-for-edge-enabled-dash.git
+
+
 Reference
 =======
 Here is our paper describing the dataset generation process and the machine learnign approach to predict video segment bitrate with the objective of predictively prefetching to the mobile edge, segments of ongoing video streams
