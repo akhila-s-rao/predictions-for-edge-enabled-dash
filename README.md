@@ -56,6 +56,12 @@ https://github.com/akhila-s-rao/machine-learning-for-edge-enabled-dash/blob/mast
 
 Reference
 =======
-Here is our paper describing the dataset generation process and the machine learnign approach to predict video segment bitrate with the objective of predictively prefetching to the mobile edge, segments of ongoing video streams
+Here are our papers describing the dataset generation process and the machine learning approach to predict video segment bitrate with the objective of predictively prefetching to the mobile edge, segments of ongoing video streams
 
+This CNSM short paper presents initial results with a solution towards this problem 
 CNSM 2020 https://ieeexplore.ieee.org/document/9269054
+
+The work was then extended with a reformulation of the solution approach with insight from our previous short paper and concluded in our journal paper 
+TNSM 2022 https://ieeexplore.ieee.org/document/9841468
+
+Please refer these papers when using the results, code or dataset provided here.  
